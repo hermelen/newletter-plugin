@@ -39,7 +39,7 @@ class Zero_Newsletter
    }
 }
 
-
+new Zero_Newsletter();
 
 
 
