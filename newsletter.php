@@ -9,6 +9,7 @@ class Zero_Newsletter
 {
    public function __construct()
    {
+       add_action('wp_loaded', array($this, 'save_email'));
        // add_filter('wp_title', array($this, 'modify_page_title'), 20) ;
    }
    public static function install()
@@ -36,7 +37,6 @@ class Zero_Newsletter
            }
        }
    }
-   add_action('wp_loaded', array($this, 'save_email'));
 }
 
 
