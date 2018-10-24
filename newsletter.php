@@ -29,13 +29,29 @@ class Zero_Newsletter
    public function save_email()
    {
        if (isset($_POST['zero_newsletter_email']) && !empty($_POST['zero_newsletter_email'])) {
-           global $wpdb;
-           $email = $_POST['zero_newsletter_email'];
+         global $wpdb;
+         $email = $_POST['zero_newsletter_email'];
 
+         $secret = "6Leyd3YUAAAAAFpfiSecypw8bkCgrbRmOvdEPWMd";// Ma clé privée
+         $response = $_POST['g-recaptcha-response'];// Paramètre renvoyé par le recaptcha
+         $remoteip = $_SERVER['REMOTE_ADDR'];// On récupère l'IP de l'utilisateur
+
+         $api_url = "https://www.google.com/recaptcha/api/siteverify?secret="
+             . $secret
+             . "&response=" . $response
+             . "&remoteip=" . $remoteip ;
+
+         $decode = json_decode(file_get_contents($api_url), true);
+
+    	   if ($decode['success'] == true) {// C'est un humain
            $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}zero_newsletter_email WHERE email = '$email'");
            if (is_null($row)) {
-               $wpdb->insert("{$wpdb->prefix}zero_newsletter_email", array('email' => $email));
+             $wpdb->insert("{$wpdb->prefix}zero_newsletter_email", array('email' => $email));
            }
+    	   }
+    	   else {// C'est un robot ou le code de vérification est incorrecte
+
+    	   }
        }
    }
    public function menu_html()
